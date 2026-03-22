@@ -4,7 +4,7 @@
   <img src="logo.png" width="512" alt="ForgePages logo">
 </p>
 
-A small static site generator written in Lua. You write your pages, it slaps your header and footer on everything and spits out a ready-to-upload folder.
+A small static site generator written in Lua. You write your pages, it adds your header and footer to everything and builds your site.
 
 No dependencies beyond Lua and [LuaFileSystem](https://lunarmodules.github.io/luafilesystem/).
 
