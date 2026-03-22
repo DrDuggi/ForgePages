@@ -103,12 +103,21 @@ local function mkdir(path)
 	end
 end
 
-local function list_files(dir)
+local function list_files(dir, prefix)
 	local files = {}
+	prefix = prefix or ""
 	if not is_dir(dir) then return files end
 	for name in lfs.dir(dir) do
 		if name ~= "." and name ~= ".." then
-			table.insert(files, name)
+			local full = dir .. "/" .. name
+			local rel  = prefix == "" and name or prefix .. "/" .. name
+			if is_dir(full) then
+				for _, sub in ipairs(list_files(full, rel)) do
+					table.insert(files, sub)
+				end
+			else
+				table.insert(files, rel)
+			end
 		end
 	end
 	table.sort(files)
@@ -252,6 +261,8 @@ local function build(cfg)
 			local merged = apply_vars(content, resolved)
 			merged = apply_vars(merged, vars)
 
+			local out_subdir = output_path:match("^(.+)/[^/]+$")
+			if out_subdir then mkdir(out_subdir) end
 			write_file(output_path, merged)
 			print("OK: " .. input_path .. " -> " .. output_path)
 			count = count + 1
