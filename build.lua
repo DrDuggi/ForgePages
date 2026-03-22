@@ -191,13 +191,10 @@ end
 -- copy
 
 local function copy_content(output_dir)
-	for _, name in ipairs(list_files(CONTENT_DIR)) do
-		local src = CONTENT_DIR .. "/" .. name
-		if is_dir(src) then
-			mkdir(output_dir .. "/" .. name)
-			os.execute("cp -r \"" .. src .. "/\"* \"" .. output_dir .. "/" .. name .. "/\" 2>/dev/null")
-		else
-			os.execute("cp \"" .. src .. "\" \"" .. output_dir .. "/\" 2>/dev/null")
+	for name in lfs.dir(CONTENT_DIR) do
+		if name ~= "." and name ~= ".." then
+			local src = CONTENT_DIR .. "/" .. name
+			os.execute("cp -r \"" .. src .. "\" \"" .. output_dir .. "/\" 2>/dev/null")
 		end
 	end
 end
