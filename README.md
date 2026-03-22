@@ -1,7 +1,7 @@
 # ForgePages
 
 <p align="center">
-  <img src="logo.png" width="400" alt="ForgePages logo">
+  <img src="logo.png" width="512" alt="ForgePages logo">
 </p>
 
 A small static site generator written in Lua. You write your pages, it slaps your header and footer on everything and spits out a ready-to-upload folder.
