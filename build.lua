@@ -194,21 +194,23 @@ end
 -- copy
 
 local function copy_content(output_dir)
+	local function copy_recursive(src, dst)
+		dir.makepath(dst)
+		for item in lfs.dir(src) do
+			if item ~= "." and item ~= ".." then
+				local s, d = path.join(src, item), path.join(dst, item)
+				if path.isdir(s) then copy_recursive(s, d)
+				else dir.copyfile(s, d) end
+			end
+		end
+	end
+
 	for name in lfs.dir(CONTENT_DIR) do
 		if name ~= "." and name ~= ".." then
-			local src = path.join(CONTENT_DIR, name)
-			local dst = path.join(output_dir, name)
-			if path.isdir(src) then
-				dir.makepath(dst)
-				for _, f in ipairs(dir.getallfiles(src)) do
-					local rel = f:sub(#src + 2) -- path.relpath(f, src) not working.
-					local out = path.join(dst, rel)
-					dir.makepath(path.dirname(out))
-					dir.copyfile(f, out)
-				end
-			else
-				dir.copyfile(src, dst)
-			end
+			local s = path.join(CONTENT_DIR, name)
+			local d = path.join(output_dir, name)
+			if path.isdir(s) then copy_recursive(s, d)
+			else dir.copyfile(s, d) end
 		end
 	end
 end
