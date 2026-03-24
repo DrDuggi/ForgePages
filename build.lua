@@ -25,6 +25,9 @@ SOFTWARE.
 -- build.lua
 
 local lfs = require("lfs")
+local dir = require("pl.dir")
+local path = require("pl.path")
+local socket = require("socket")
 
 local TEMPLATE_DIR = "template"
 local SITES_DIR    = "sites"
@@ -193,8 +196,19 @@ end
 local function copy_content(output_dir)
 	for name in lfs.dir(CONTENT_DIR) do
 		if name ~= "." and name ~= ".." then
-			local src = CONTENT_DIR .. "/" .. name
-			os.execute("cp -r \"" .. src .. "\" \"" .. output_dir .. "/\" 2>/dev/null")
+			local src = path.join(CONTENT_DIR, name)
+			local dst = path.join(output_dir, name)
+			if path.isdir(src) then
+				dir.makepath(dst)
+				for _, f in ipairs(dir.getallfiles(src)) do
+					local rel = f:sub(#src + 2)
+					local out = path.join(dst, rel)
+					dir.makepath(path.dirname(out))
+					dir.copyfile(f, out)
+				end
+			else
+				dir.copyfile(src, dst)
+			end
 		end
 	end
 end
@@ -232,7 +246,7 @@ local function build(cfg)
 		return
 	end
 
-	os.execute("rm -rf \"" .. output_dir .. "\"")
+	pcall(dir.rmtree, output_dir)
 	mkdir(output_dir)
 	copy_content(output_dir)
 
@@ -319,7 +333,7 @@ if watch then
 			print()
 			last = current
 		end
-		os.execute("sleep " .. cfg.watch_interval)
+		socket.sleep(cfg.watch_interval)
 	end
 else
 	build(cfg)
