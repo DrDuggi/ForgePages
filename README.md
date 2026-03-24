@@ -6,7 +6,7 @@
 
 A small static site generator written in Lua. You write your pages, it adds your header and footer to everything and builds your site.
 
-No dependencies beyond Lua and [LuaFileSystem](https://lunarmodules.github.io/luafilesystem/).
+No dependencies beyond Lua, [LuaFileSystem](https://lunarmodules.github.io/luafilesystem/), [Penlight](https://github.com/lunarmodules/Penlight) and [LuaSocket](https://github.com/lunarmodules/luasocket)
 
 ---
 
@@ -131,7 +131,11 @@ lua build.lua --watch
 
 - Lua 5.x
 - [LuaFileSystem](https://lunarmodules.github.io/luafilesystem/)
+- [Penlight](https://github.com/lunarmodules/Penlight)
+- [LuaSocket](https://github.com/lunarmodules/luasocket)
 
 ```bash
 luarocks install luafilesystem
+luarocks install penlight
+luarocks install luasocket
 ```
