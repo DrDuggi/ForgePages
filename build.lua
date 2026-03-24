@@ -201,7 +201,7 @@ local function copy_content(output_dir)
 			if path.isdir(src) then
 				dir.makepath(dst)
 				for _, f in ipairs(dir.getallfiles(src)) do
-					local rel = f:sub(#src + 2)
+					local rel = f:sub(#src + 2) -- path.relpath(f, src) not working.
 					local out = path.join(dst, rel)
 					dir.makepath(path.dirname(out))
 					dir.copyfile(f, out)
